@@ -11,5 +11,7 @@ export const router = createBrowserRouter([
         <AuthPage />
       </Suspense>
     ),
+    action: (meta) =>
+      import("./screens/AuthPage").then((module) => module.action(meta)),
   },
 ]);

@@ -1,4 +1,3 @@
-import React from "react";
 import { redirect } from "react-router-dom";
 import AuthForm from "../components/AuthForm";
 
@@ -12,7 +11,6 @@ const AuthPage = () => {
 
 interface ActionArgs {
   request: Request;
-  response: Response;
 }
 
 interface AuthData {
@@ -29,7 +27,7 @@ export const action = async ({ request }: ActionArgs) => {
     throw JSON.stringify({ message: "Unsupported mode", status: 422 });
   }
   const data = await request.formData();
-
+  console.log(data);
   const authData: AuthData = {
     email: data.get("email") as string | null,
     password: data.get("password") as string | null,
@@ -39,7 +37,7 @@ export const action = async ({ request }: ActionArgs) => {
     authData.name = data.get("name") as string | null;
   }
 
-  const response = await fetch(`http://localhost:4000/api/auth/${mode}`, {
+  const response = await fetch(`http://localhost:4000/v1/api/auth/${mode}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -61,5 +59,15 @@ export const action = async ({ request }: ActionArgs) => {
       status: 500,
     });
   }
+
+  const resData = await response.json();
+  const token = resData.token;
+  console.log(resData);
+  localStorage.setItem("token", token);
+  const expiration = new Date();
+  expiration.setHours(expiration.getHours() + 1);
+  localStorage.setItem("expiration", expiration.toISOString());
+
+  return redirect("/");
 };
 export default AuthPage;

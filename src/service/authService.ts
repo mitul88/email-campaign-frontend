@@ -19,9 +19,12 @@ class AuthService {
   // Fetch a new access token using the refresh token
   async refreshToken(): Promise<void> {
     try {
-      const response = await axios.get<TokenResponse>("/auth/refresh", {
-        withCredentials: true, // Include httpOnly cookies
-      });
+      const response = await axios.get<TokenResponse>(
+        "v1/api/auth/refresh-token",
+        {
+          withCredentials: true, // Include httpOnly cookies
+        }
+      );
       this.setAccessToken(response.data.token);
     } catch (error) {
       console.error("Failed to refresh token:", error);
