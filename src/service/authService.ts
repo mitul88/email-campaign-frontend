@@ -8,12 +8,10 @@ interface TokenResponse {
 class AuthService {
   private accessToken: string | null = null;
 
-  // Get the access token (in memory)
   getAccessToken(): string | null {
     return this.accessToken;
   }
 
-  // Save the access token in memory
   setAccessToken(token: string): void {
     this.accessToken = token;
   }
